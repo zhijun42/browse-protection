@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>Morning Protection</title>
+  <style>
+    :root { color-scheme: light dark; --bg: #faf7f2; --fg: #1f1d1a; --muted: #6f6a62;
+      --accent: #a94725; --card: #fff; --line: #e6e0d6; }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #16150f; --fg: #f2efe8; --muted: #b0a89d; --accent: #ec9b72;
+        --card: #201e17; --line: #383329; }
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body { margin: 0; width: 350px; padding: 18px; background: var(--bg); color: var(--fg);
+      font: 14px/1.5 system-ui, sans-serif; }
+    header, .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    h1 { font-size: 17px; margin: 0; }
+    button, select, input { font: inherit; color: inherit; }
+    button { cursor: pointer; border: 1px solid var(--line); border-radius: 8px;
+      padding: 7px 11px; background: var(--bg); }
+    button:disabled { cursor: default; opacity: .55; }
+    button.primary { border-color: var(--accent); color: var(--accent); font-weight: 650; }
+    .quiet { border: 0; color: var(--muted); padding-inline: 4px; }
+    section { margin-top: 14px; padding: 14px; border: 1px solid var(--line); border-radius: 12px;
+      background: var(--card); }
+    select, input { min-width: 0; padding: 6px 8px; background: var(--bg);
+      border: 1px solid var(--line); border-radius: 8px; }
+    select { max-width: 205px; }
+    input { width: 70px; }
+    form { margin-top: 12px; }
+    p { margin: 8px 0 0; color: var(--muted); }
+    #time { font-size: 26px; font-weight: 670; font-variant-numeric: tabular-nums; margin-top: 4px; }
+    #message { font-size: 12px; }
+  </style>
+</head>
+<body>
+  <header><h1>Morning Protection</h1><button class="quiet" id="settings">设置</button></header>
+  <section id="usage" hidden>
+    <div class="row"><label for="site">网站</label><select id="site"></select></div>
+    <p id="mode"></p>
+    <div id="time"></div>
+    <p id="detail"></p>
+    <p class="row">
+      <button class="primary" id="study-open" aria-expanded="false" aria-controls="study-form">开启学习</button>
+      <button id="study-finish" hidden>完成学习</button>
+    </p>
+    <form id="study-form" class="row" hidden>
+      <label>分钟 <input type="number" id="minutes" min="1" max="1440" step="1" value="30" required></label>
+      <button type="submit" id="study-add">开始学习</button>
+    </form>
+  </section>
+  <p id="empty" hidden>还没有配置娱乐额度。可在设置中添加网站。</p>
+  <p id="message" role="status"></p>
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

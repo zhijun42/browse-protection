@@ -3,11 +3,30 @@ export const DEFAULTS = {
   blockStart: '22:00',
   blockEnd: '10:30',
   domains: ['xiaohongshu.com', 'amap.com', 'douban.com'],
+  leisureLimits: { 'xiaohongshu.com': 40 },
 };
 
 export async function getConfig() {
   const stored = await chrome.storage.sync.get(DEFAULTS);
-  return { ...DEFAULTS, ...stored, domains: normalizeDomains(stored.domains) };
+  return {
+    ...DEFAULTS,
+    ...stored,
+    domains: normalizeDomains(stored.domains),
+    leisureLimits: normalizeLeisureLimits(stored.leisureLimits ?? DEFAULTS.leisureLimits),
+  };
+}
+
+export function normalizeLeisureLimits(input) {
+  const limits = {};
+  const candidates = Object.entries(input ?? {})
+    .map(([raw, minutes]) => [normalizeDomains([raw])[0] ?? '', minutes])
+    .sort(([a], [b]) => a.length - b.length);
+  for (const [domain, minutes] of candidates) {
+    if (!domain.split('.').every((label) => /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(label))
+      || !Number.isInteger(minutes) || minutes < 1 || minutes > 1440) continue;
+    if (!hostMatches(domain, Object.keys(limits))) limits[domain] = minutes;
+  }
+  return limits;
 }
 
 export function normalizeDomains(input) {
@@ -74,4 +93,13 @@ export function nextBoundaryAt(config, now = new Date()) {
 export function hostMatches(host, domains) {
   const normalized = String(host).toLowerCase();
   return domains.some((d) => normalized === d || normalized.endsWith('.' + d));
+}
+
+export function getOriginalUrl(blockedPage) {
+  try {
+    const original = new URL(blockedPage.hash.slice(1));
+    return ['http:', 'https:'].includes(original.protocol) ? original.href : null;
+  } catch {
+    return null;
+  }
 }

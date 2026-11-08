@@ -24,6 +24,7 @@
         }
       }
       * { box-sizing: border-box; }
+      [hidden] { display: none !important; }
       body {
         margin: 0;
         min-height: 100vh;
@@ -64,6 +65,14 @@
         cursor: pointer;
       }
       button:hover { border-color: var(--accent); color: var(--accent); }
+      .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 24px; }
+      .actions button { margin-top: 0; }
+      button.primary { background: var(--fg); border-color: var(--fg); color: var(--bg); font-weight: 650; }
+      button:disabled { opacity: .55; cursor: default; }
+      .study-form { display: flex; align-items: center; gap: 8px; }
+      input[type="number"] { width: 66px; padding: 7px 8px; border: 1px solid var(--border);
+        border-radius: 8px; background: var(--bg); color: var(--fg); font: inherit; }
+      #message { margin-top: 12px; }
     </style>
   </head>
   <body>
@@ -73,7 +82,21 @@
       <div class="countdown" id="countdown">--:--:--</div>
       <p id="unlock-hint">距离解锁</p>
       <div class="window" id="window"></div>
+      <div class="actions" id="leisure-actions" hidden>
+        <button class="primary" id="leave">结束浏览</button>
+        <button data-extra="10">再看 10 分钟</button>
+        <button data-extra="20">再看 20 分钟</button>
+      </div>
+      <div class="actions" id="study-actions" hidden>
+        <button class="primary" id="study-finish">完成学习</button>
+        <form id="study-form" class="study-form">
+          <label><input type="number" id="minutes" aria-label="额外学习分钟数" min="1" max="1440"
+            step="1" value="20" required> 分钟</label>
+          <button type="submit">延长学习</button>
+        </form>
+      </div>
       <button id="options">修改设置</button>
+      <p id="message" role="status" hidden></p>
     </main>
     <script type="module" src="blocked.js"></script>
   </body>

@@ -105,15 +105,22 @@
       </fieldset>
 
       <fieldset>
-        <legend>总开关</legend>
+        <legend>每日娱乐额度</legend>
+        <label for="leisureLimits">网站及分钟数</label>
+        <textarea id="leisureLimits" spellcheck="false" placeholder="xiaohongshu.com 40"></textarea>
+        <p class="hint">一行一个网站，例如 xiaohongshu.com 40。子域共用同一额度；留空则不限制娱乐时间。</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>定时屏蔽开关</legend>
         <div class="toggle">
           <input type="checkbox" id="enabled" />
-          <label for="enabled">启用屏蔽</label>
+          <label for="enabled">启用定时屏蔽</label>
         </div>
       </fieldset>
 
       <button id="save">保存</button>
-      <span class="saved" id="saved"></span>
+      <span class="saved" id="saved" role="status"></span>
     </div>
     <script type="module" src="options.js"></script>
   </body>
